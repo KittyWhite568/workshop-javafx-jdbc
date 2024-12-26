@@ -11,4 +11,12 @@ public class Utils {
 		
 	}
 
+	public static Integer tryParseToInteger(String str) {
+		try {
+			return Integer.parseInt(str);
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+	}
 }
