@@ -1,14 +1,19 @@
 package gui.util;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Locale;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class Utils {
 
@@ -61,6 +66,50 @@ public class Utils {
 			};
 			return cell;
 		});
-	}
 	
+	}
+
+	
+	public static void formatDatePicker(DatePicker datePicker, String format) {
+
+			 if (datePicker == null || format == null || format.isEmpty()) {
+		            throw new IllegalArgumentException("DatePicker ou formato não podem ser nulos ou vazios.");
+		        }	
+			
+		 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(format);
+
+	        datePicker.setConverter(new StringConverter<LocalDate>() {
+		 
+
+		
+	            {
+	            	
+	            	datePicker.setPromptText(format.toLowerCase());
+	            }
+
+	            @Override
+	            public String toString(LocalDate date) {
+	                if (date != null) {
+	                    return dateFormatter.format(date);
+	                } else {
+	                    return "";
+	                }
+	            }
+
+	            @Override
+	            public LocalDate fromString(String string) {
+	                if (string != null && !string.isEmpty()) {
+	                    try {
+	                        return LocalDate.parse(string, dateFormatter);
+	                    } catch (DateTimeParseException e) {
+	                        System.err.println("Erro ao converter a data: " + e.getMessage());
+	                        return null; 
+	                    }
+	                } else {
+	                    return null;
+	                }
+	            }
+	        });
+	  
+		 }
 }
